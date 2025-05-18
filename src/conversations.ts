@@ -115,12 +115,13 @@ export async function rentProperty(conversation: Conversation, ctx: Context) {
   const name = await conversation.form.text();
   console.log(result, name);
   await ctx.reply("Який ваш номер телефона: ");
+  const phone = await conversation.form.text();
   await ctx.reply("Дякуємо, менеджер скоро відправить інформацію.");
   try {
     const chat = await ctx.api.getChat(config.managerId);
     await ctx.api.sendMessage(
       chat.id,
-      `Інформація:\nЦікавить нерухомість: ${result.propType}\nВажливі для купівлі: ${result.important.join(",")}\nВажлива інфраструктура: ${result.infra}\nНік: @${ctx.chat?.username}\nЗвертатися: ${name}`,
+      `Інформація:\nЦікавить нерухомість: ${result.propType}\nВажливі для купівлі: ${result.important.join(",")}\nВажлива інфраструктура: ${result.infra}\nНік: @${ctx.chat?.username}\nЗвертатися: ${name}\nНомер телефона: ${phone}`,
     );
   } catch (e) {}
 }
