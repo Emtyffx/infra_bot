@@ -108,17 +108,14 @@ export async function rentProperty(conversation: Conversation, ctx: Context) {
   );
   result.infra = thirdData;
   await ctx.reply("Ми вже готуємо для вас гарну пропозицію ;)");
-  await ctx.reply(
-    `Інформація про менеджера:\nНомер телефону:${config.managerPhone}\n${config.managerName}`,
-  );
-  await ctx.reply("Як до вас можно звертатися?");
+  await ctx.reply("Як до вас можна звертатися?");
   const name = await conversation.form.text();
   console.log(result, name);
   const phoneKeyboard = new Keyboard()
     .requestContact("Share your phone number")
     .oneTime()
     .row();
-  await ctx.reply("Який ваш номер телефона?", { reply_markup: phoneKeyboard });
+  await ctx.reply("Який ваш номер телефону?", { reply_markup: phoneKeyboard });
   const phone = await conversation.form.contact();
   await ctx.reply("Дякуємо, менеджер скоро відправить інформацію.");
   try {
@@ -126,6 +123,10 @@ export async function rentProperty(conversation: Conversation, ctx: Context) {
     await ctx.api.sendMessage(
       chat.id,
       `Інформація:\nЦікавить нерухомість: ${result.propType}\nВажливі для купівлі: ${result.important.join(",")}\nВажлива інфраструктура: ${result.infra}\nНік: @${ctx.chat?.username}\nЗвертатися: ${name}\nНомер телефона: ${phone.phone_number}`,
+    );
+
+    await ctx.reply(
+      `Інформація про менеджера:\nНомер телефону:${config.managerPhone}\n${config.managerName}`,
     );
   } catch (e) {}
 }

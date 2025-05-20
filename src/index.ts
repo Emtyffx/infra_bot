@@ -16,6 +16,7 @@ if (!TOKEN) {
 }
 
 const bot = new Bot<ConversationFlavor<Context>>(TOKEN);
+console.log("test");
 
 bot.use(conversations());
 
