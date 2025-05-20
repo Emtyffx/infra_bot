@@ -1,5 +1,5 @@
 import { conversations, type Conversation } from "@grammyjs/conversations";
-import { InlineKeyboard, type Context } from "grammy";
+import { InlineKeyboard, Keyboard, type Context } from "grammy";
 import config from "../configuration.json";
 
 interface Callback {
@@ -114,14 +114,18 @@ export async function rentProperty(conversation: Conversation, ctx: Context) {
   await ctx.reply("Як до вас можно звертатися?");
   const name = await conversation.form.text();
   console.log(result, name);
-  await ctx.reply("Який ваш номер телефона: ");
-  const phone = await conversation.form.text();
+  const phoneKeyboard = new Keyboard()
+    .requestContact("Share your phone number")
+    .oneTime()
+    .row();
+  await ctx.reply("Який ваш номер телефона?", { reply_markup: phoneKeyboard });
+  const phone = await conversation.form.contact();
   await ctx.reply("Дякуємо, менеджер скоро відправить інформацію.");
   try {
     const chat = await ctx.api.getChat(config.managerId);
     await ctx.api.sendMessage(
       chat.id,
-      `Інформація:\nЦікавить нерухомість: ${result.propType}\nВажливі для купівлі: ${result.important.join(",")}\nВажлива інфраструктура: ${result.infra}\nНік: @${ctx.chat?.username}\nЗвертатися: ${name}\nНомер телефона: ${phone}`,
+      `Інформація:\nЦікавить нерухомість: ${result.propType}\nВажливі для купівлі: ${result.important.join(",")}\nВажлива інфраструктура: ${result.infra}\nНік: @${ctx.chat?.username}\nЗвертатися: ${name}\nНомер телефона: ${phone.phone_number}`,
     );
   } catch (e) {}
 }
