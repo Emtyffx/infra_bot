@@ -14,16 +14,16 @@ export async function rentProperty(conversation: Conversation, ctx: Context) {
     infra: "",
   };
   const propSizeKeyboard = new InlineKeyboard()
-    .text("1К кв", "first#1К кв")
+    .text("1 кім. квартира", "first#1 кім. квартира")
     .row()
-    .text("2K кв", "first#2К кв")
+    .text("2 кім. квартира", "first#2 кім. квартира")
     .row()
-    .text("3K кв", "first#3K кв")
+    .text("3 кім. квартира", "first#3 кім. квартира")
     .row()
-    .text("Комерція", "first#Комерція")
+    .text("Таунхаус/котедж", "first#Таунхаус/котедж")
     .row()
     .text("Інше", "first#Інше");
-  const firstMessage = await ctx.reply("Яка нерухомість вас цікавить", {
+  const firstMessage = await ctx.reply("Яка нерухомість вас цікавить?", {
     reply_markup: propSizeKeyboard,
   });
   const query = await conversation.waitForCallbackQuery(/^first/g);
